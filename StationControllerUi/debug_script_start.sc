@@ -1,0 +1,1 @@
+﻿open socket_client name=debug_connection proto=standard host=127.0.0.1 service=5001 options="wait_for_reply=no rcv_eol=\"<EOF>\" xmt_eol=\"<EOF>\"" no_error

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config>
+  <ScPath>.\SC\sc.exe</ScPath>
+  <DebugPort>5001</DebugPort>
+  <SyntaxDescriptionFile>sc.xshd</SyntaxDescriptionFile>
+</Config>

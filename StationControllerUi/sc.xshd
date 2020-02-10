@@ -1,0 +1,103 @@
+﻿<SyntaxDefinition name="SC"
+        xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Comment" foreground="Green" />
+  <Color fontWeight="bold" name="String" foreground="Gray" />
+  <Color fontWeight="bold" name="Variable" foreground="Orange" background="LightYellow" />
+  <Color fontWeight="bold" name="SpecialChars" foreground="Brown" />
+  <Color fontWeight="bold" name="SxFy" foreground="Orange" />
+  <!-- This is the main ruleset. -->
+  <RuleSet>
+    <Span color="Comment" begin="#" />
+    <Span color="Comment" multiline="true" begin="/\*" end="\*/" />
+
+    <Span color="String">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <!-- nested span for escape sequences -->
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <Rule color="Variable">
+      \$([^\)\(\[\]\{\}\s&gt;&lt;])*
+    </Rule>
+
+    <Rule color="SxFy">
+      S[0-9]*F[0-9]*
+    </Rule>
+
+    <Keywords color="SpecialChars">
+      <Word>(</Word>
+      <Word>)</Word>
+      <Word>&gt;</Word>
+      <Word>&lt;</Word>
+      <Word>{</Word>
+      <Word>}</Word>
+    </Keywords>
+
+    <Keywords fontWeight="bold" foreground="Blue">
+      <Word>after</Word>
+      <Word>else</Word>
+      <Word>format</Word>
+      <Word>ne</Word>
+      <Word>set_program</Word>
+      <Word>and</Word>
+      <Word>else_if</Word>
+      <Word>glet</Word>
+      <Word>next</Word>
+      <Word>sleep</Word>
+      <Word>begin</Word>
+      <Word>end</Word>
+      <Word>gosub</Word>
+      <Word>open</Word>
+      <Word>start_timer</Word>
+      <Word>break</Word>
+      <Word>end_if</Word>
+      <Word>goto</Word>
+      <Word>or</Word>
+      <Word>step</Word>
+      <Word>break_loop</Word>
+      <Word>end_while</Word>
+      <Word>if</Word>
+      <Word>pragma</Word>
+      <Word>stop_timer</Word>
+      <Word>close</Word>
+      <Word>eq</Word>
+      <Word>import</Word>
+      <Word>print</Word>
+      <Word>system</Word>
+      <Word>continue</Word>
+      <Word>error</Word>
+      <Word>is_label</Word>
+      <Word>proto</Word>
+      <Word>then</Word>
+      <Word>define</Word>
+      <Word>exit itoi</Word>
+      <Word>return</Word>
+      <Word>to</Word>
+      <Word>define_array</Word>
+      <Word>export</Word>
+      <Word>label</Word>
+      <Word>send</Word>
+      <Word>while</Word>
+      <Word>define_xfer</Word>
+      <Word>for</Word>
+      <Word>let</Word>
+      <Word>send_reply</Word>
+      <Word>delete</Word>
+      <Word>l_delete</Word>
+      <Word>local_var</Word>
+    </Keywords>
+
+    <!-- Digits -->
+    <Rule foreground="DarkRed">
+      \b0[xX][0-9a-fA-F]+  # hex number
+      |    \b
+      (    \d+(\.[0-9]+)?   #number with optional floating point
+      |    \.[0-9]+         #or just starting with floating point
+      )
+      ([eE][+-]?[0-9]+)? # optional exponent
+    </Rule>
+  </RuleSet>
+</SyntaxDefinition>

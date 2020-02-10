@@ -1,0 +1,30 @@
+﻿<Window x:Class="StationControllerUi.Windows.DebuggerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StationControllerUi.Windows"
+        xmlns:views="clr-namespace:StationControllerUi.Views"
+        mc:Ignorable="d"
+        Title="Debugger" Height="436.288" Width="884.764" WindowStyle="ToolWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <TabControl TabStripPlacement="Bottom">
+                <TabItem Header="Log">
+                    <views:LogView x:Name="logView" />
+                </TabItem>
+                <TabItem Header="Output" Height="22" VerticalAlignment="Top">
+                    <views:LogView x:Name="printView" />
+                </TabItem>
+                <TabItem Header="Scenarios" Height="22" VerticalAlignment="Top">
+                    <views:ScenarioSelectView x:Name="scenarioSelectView" />
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+        <views:SendCommandView Grid.Row="1" x:Name="sendCommandView"/>
+    </Grid>
+</Window>
