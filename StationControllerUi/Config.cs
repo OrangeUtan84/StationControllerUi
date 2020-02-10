@@ -10,8 +10,7 @@ namespace StationControllerUi
 {
     public class Config
     {
-
-
+        
         public string ScPath { get; set; }
         public int DebugPort { get; set; }
         public string SyntaxDescriptionFile { get; set; }
