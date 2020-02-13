@@ -35,6 +35,19 @@ namespace StationControllerUi.Controls
             }
         }
 
+        public List<string> CompletionWords
+        {
+            get
+            {
+                return (List<string>)GetValue(CompletionWordsProptery);
+            }
+            set
+            {
+                SetValue(CompletionWordsProptery, value);
+                RaisePropertyChanged("CompletionWords");
+            }
+        }
+
         public int SelectedLine
         {
             get
@@ -64,6 +77,18 @@ namespace StationControllerUi.Controls
                 }
             );
 
+        public static readonly DependencyProperty CompletionWordsProptery =
+            DependencyProperty.Register(
+                "CompletionWords",
+                typeof(List<string>),
+                typeof(BindableAvalonEditor),
+                new FrameworkPropertyMetadata
+                {
+                    DefaultValue = new List<string>(),
+                    BindsTwoWayByDefault = false
+                }
+            );
+
         public static readonly DependencyProperty SelectedLineProperty =
             DependencyProperty.Register(
                 "SelectedLine",
@@ -80,7 +105,7 @@ namespace StationControllerUi.Controls
 
         protected static void OnNewLineSelected(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if((int) e.NewValue == 0)
+            if ((int)e.NewValue == 0)
             {
                 //Line zero does not exist => document empty, return
                 return;
@@ -93,8 +118,8 @@ namespace StationControllerUi.Controls
                 var line = target.Document.GetLineByNumber((int)e.NewValue + 1);
 
                 target.Select(line.Offset, line.TotalLength - 1);
-                
-                
+
+
                 //target.BackgroundRenderer.LineToHighlight = (int) e.NewValue + 1;
 
                 //target.TextArea.TextView.InvalidateLayer(KnownLayer.Selection);
@@ -119,15 +144,16 @@ namespace StationControllerUi.Controls
                 target.CaretOffset = Math.Min(caretOffset, newValue.ToString().Length);
             }
         }
+        
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            if(e.Key == Key.Space && Keyboard.IsKeyDown(Key.LeftCtrl))
+            if (e.Key == Key.Space && Keyboard.IsKeyDown(Key.LeftCtrl))
             {
                 e.Handled = true; //needed to discard the input for <space>
                 //Auto Completion required
-                CustomCompletionWindow completionWindow = new CustomCompletionWindow(TextArea);
-                completionWindow.Closed += (_,__) => completionWindow = null;
+                CustomCompletionWindow completionWindow = new CustomCompletionWindow(TextArea, CompletionWords?.Select(s => $"${s}").ToList());
+                completionWindow.Closed += (_, __) => completionWindow = null;
                 completionWindow.Show();
             }
         }

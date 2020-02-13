@@ -69,6 +69,7 @@
     <Compile Include="Converters\FullPathToFileNameConverter.cs" />
     <Compile Include="Util\ClientEventArgs.cs" />
     <Compile Include="Util\DataReceivedEventArgs.cs" />
+    <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\Scenario.cs" />
     <Compile Include="Util\StationController.cs" />
     <Compile Include="Commands\RelayCommand.cs" />

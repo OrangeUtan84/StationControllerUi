@@ -18,6 +18,7 @@
                 
             </ComboBox>
             <controls:BindableAvalonEditor DockPanel.Dock="Bottom"
+            CompletionWords="{Binding CompletionWordList, Mode=OneWay}"
             Text="{Binding Content,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
             ShowLineNumbers="True" 
             x:Name="syntaxEdit" 

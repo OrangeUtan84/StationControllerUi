@@ -10,8 +10,9 @@ namespace StationControllerUi.Controls
 {
     public class CustomCompletionWindow : CompletionWindow
     {
-        public CustomCompletionWindow(TextArea textArea) : base(textArea)
+        public CustomCompletionWindow(TextArea textArea, List<string> customCompletionWords) : base(textArea)
         {
+            #region static completion words
             CompletionList.CompletionData.Add(new CustomCompletionData("if", "if statement"));
             CompletionList.CompletionData.Add(new CustomCompletionData("else", "else block of an if statement"));
             CompletionList.CompletionData.Add(new CustomCompletionData("else_if", "else if block of an if statment"));
@@ -25,6 +26,15 @@ namespace StationControllerUi.Controls
             CompletionList.CompletionData.Add(new CustomCompletionData("return", "returns from a subroutine"));
             CompletionList.CompletionData.Add(new CustomCompletionData("define", "defines a constant"));
             CompletionList.CompletionData.Add(new CustomCompletionData("open", "opens a socket connection"));
+            #endregion
+
+            if (customCompletionWords != null)
+            {
+                foreach (var completionWord in customCompletionWords)
+                {
+                    CompletionList.CompletionData.Add(new CustomCompletionData(completionWord, string.Empty));
+                }
+            }
         }
     }
 }
