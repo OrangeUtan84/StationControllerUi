@@ -33,6 +33,9 @@ namespace StationControllerUi
         private Util.StationController _stationController;
         private Util.RescentFilesHandler _rescentFilesHandler;
         private Config _config;
+
+
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -87,7 +90,7 @@ namespace StationControllerUi
             _rescentFilesHandler = new Util.RescentFilesHandler("rescent.txt");
             _mainMenuViewModel.RescentFiles = _rescentFilesHandler.RescentFiles;
             _stationController = new Util.StationController(_config.ScPath, _config.DebugPort);
-           
+            
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -174,6 +177,23 @@ namespace StationControllerUi
         }
 
 
+
+        /// <summary>
+        /// OnKeyDown event for keyboard shortcuts
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key == Key.S && e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
+            {
+                SaveFile();
+            }
+            else if(e.Key == Key.O && e.KeyboardDevice.IsKeyDown(Key.LeftCtrl))
+            {
+                OpenFile();
+            }
+            base.OnKeyDown(e);
+        }
 
     }
 

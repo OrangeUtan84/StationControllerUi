@@ -14,7 +14,7 @@
     <Grid>
         <Menu>
             <MenuItem Header="File">
-                <MenuItem Header="Open" x:Name="menuFileOpen" Command="{Binding OpenCommand}" />
+                <MenuItem InputGestureText="Ctrl+O" Header="Open" x:Name="menuFileOpen" Command="{Binding OpenCommand}" />
                 <MenuItem ItemsSource="{Binding RescentFiles, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Header="Open rescent..." x:Name="menuFileOpenRescent">
                     <MenuItem.ItemContainerStyle>
                         <Style TargetType="MenuItem">
@@ -33,7 +33,7 @@
                         </DataTemplate>
                     </MenuItem.ItemTemplate>
                 </MenuItem>
-                <MenuItem Header="Save" x:Name="menuFileSave" Command="{Binding SaveCommand}" />
+                <MenuItem InputGestureText="Ctrl+S" Header="Save" x:Name="menuFileSave" Command="{Binding SaveCommand}" />
                 <MenuItem Header="Save as..." x:Name="menuFileSaveAs" Command="{Binding SaveAsCommand}" />
                 <MenuItem Header="Exit" x:Name="menuFileExit" Command="{Binding ExitCommand}" />
             </MenuItem>

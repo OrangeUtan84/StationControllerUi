@@ -202,9 +202,13 @@ namespace StationControllerUi.Util
         /// </summary>
         public void Dispose()
         {
-            if (_scProcess != null && !_scProcess.HasExited)
+            if (_scProcess != null)
             {
-                _scProcess.Kill();
+                try
+                {
+                    _scProcess.Kill();
+                }
+                catch { }
                 _scProcess.Dispose();
                 _scProcess = null;
                 IsRunning = false;
