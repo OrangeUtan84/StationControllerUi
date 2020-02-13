@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -21,9 +22,13 @@ namespace StationControllerUi.Util
         public event Action<bool> RunningStateChanged;
 
         private Process _scProcess;
+        private int _debugPort;
         private string _scPath;
         private bool _isRunning;
         private SocketConnector _connector;
+
+        private readonly string DEBUG_CONNECTION_STRING = "open socket_client name=debug_connection proto=standard host=127.0.0.1 service=5001 options=\"wait_for_reply=no rcv_eol =\\\"<EOF>\\\" xmt_eol=\\\"<EOF>\\\"\" no_error";
+
 
         public event EventHandler<ClientEventArgs> ClientConnected;
         public event EventHandler ClientDisconnected;
@@ -31,6 +36,9 @@ namespace StationControllerUi.Util
         public event EventHandler<DataReceivedEventArgs> PrintReceived;
 
         public List<Scenario> Scenarios { get; set; } = new List<Scenario>();
+
+
+
 
         /// <summary>
         /// Value that indicates if the process is currently running
@@ -56,12 +64,31 @@ namespace StationControllerUi.Util
             IsRunning = false;
             _scProcess = new Process();
             _scPath = scPath;
-            _scProcess.Exited += _scProcess_Exited;
-            _connector = new SocketConnector(debugPort);
+            for (int i = 0; i < 3; i++)
+            {
+                _debugPort = debugPort;
+                _scProcess.Exited += _scProcess_Exited;
+                try
+                {
+                    _connector = new SocketConnector(debugPort);
+                    break;
+                }
+                catch (SocketException)
+                {
+                    //port seems to be already in use
+                    debugPort++;
+                }
+            }
+
+            if(_connector == null)
+            {
+                throw new ApplicationException("Could not open port for debug socket connection");
+            }
+
             _connector.ClientConnected += StationControllerConnected;
             _connector.ClientDisconnected += StationControllerDisconneccted;
             _connector.DataReceived += StationControllerDataReceived;
-            
+
 
             _connector.Start();
         }
@@ -69,7 +96,7 @@ namespace StationControllerUi.Util
         protected void StationControllerDataReceived(object sender, DataReceivedEventArgs e)
         {
             DataReceived?.Invoke(this, e);
-            switch(e.Data.Split().First())
+            switch (e.Data.Split().First())
             {
                 case "PRINT":
                     PrintReceived?.Invoke(this, new DataReceivedEventArgs(e.Data.Replace("PRINT", "").Trim()));
@@ -109,7 +136,7 @@ namespace StationControllerUi.Util
                 FileName = _scPath,
                 Arguments = $"-i -d 1 -c \"read -P '{script}'\""
             };
-           _scProcess.Start();
+            _scProcess.Start();
             IsRunning = true;
             Thread monitorThread = new Thread(new ParameterizedThreadStart(MonitorProcess));
             monitorThread.Start(_scProcess.Id);
@@ -125,11 +152,12 @@ namespace StationControllerUi.Util
             File.Copy(script, tempScript, true);
 
             var originalContent = File.ReadAllLines(tempScript);
-            var debugStartContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "debug_script_start.sc"));
+            //var debugStartContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "debug_script_start.sc"));
             var debugEndContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "debug_script_end.sc"));
             var parsed = ParseScript(originalContent.ToList());
-            var merged = debugStartContent.Concat(parsed.Concat(debugEndContent));
-            
+            //var merged = debugStartContent.Concat(parsed.Concat(debugEndContent));
+            var merged = new string[] { string.Format(DEBUG_CONNECTION_STRING, _debugPort) }.Concat(parsed.Concat(debugEndContent));
+
             File.WriteAllLines(tempScript, merged);
             Start(tempScript);
         }
@@ -145,17 +173,17 @@ namespace StationControllerUi.Util
 
             var scenarioButtonLines = replacedScript.Where(w => w.StartsWith("#/Button"));
 
-           Scenarios = (from s in scenarioButtonLines
-                                    let splittedString = s.Split(':')
-                                    let labelName = splittedString[1]
-                                    let description = splittedString[2]
-                                    let parameters = splittedString.Length > 3 ? splittedString[3].Split('/') : new string[0]
-                                    select new Scenario
-                                    {
-                                        Name = labelName,
-                                        Description = description,
-                                        Parameters = parameters.ToList()
-                                    }).ToList();
+            Scenarios = (from s in scenarioButtonLines
+                         let splittedString = s.Split(':')
+                         let labelName = splittedString[1]
+                         let description = splittedString[2]
+                         let parameters = splittedString.Length > 3 ? splittedString[3].Split('/') : new string[0]
+                         select new Scenario
+                         {
+                             Name = labelName,
+                             Description = description,
+                             Parameters = parameters.ToList()
+                         }).ToList();
 
             return replacedScript;
         }
@@ -213,7 +241,7 @@ namespace StationControllerUi.Util
                 _scProcess = null;
                 IsRunning = false;
             }
-            if(_connector != null)
+            if (_connector != null)
             {
                 _connector.Stop();
                 _connector = null;
