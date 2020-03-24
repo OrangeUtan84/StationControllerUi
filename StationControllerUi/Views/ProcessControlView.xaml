@@ -56,6 +56,21 @@
                         </Image>
                     </Button.Content>
                 </Button>
+                <Button x:Name="btnNetwork" Command="{Binding DisplayNetworkCommand, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
+                    <Button.Content>
+                        <Image Height="16" Source="/StationControllerUi;component/Icons/Globe_64x.png">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Opacity" Value="0.5" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </Button.Content>
+                </Button>
             </ToolBar>
         </ToolBarTray>
     </Grid>

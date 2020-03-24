@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,11 +73,15 @@ namespace StationControllerUi
                 _ => _stationController.Stop(),
                 _ => _stationController.IsRunning);
 
+            _processControlViewModel.DisplayNetworkCommand = new Commands.RelayCommand(
+                _ => DisplayNetwork());
+
             editorView.Initialize(_config.SyntaxDescriptionFile);
 
             _editorViewModel = new ViewModels.EditorViewModel();
             editorView.DataContext = _editorViewModel;
             _editorViewModel.PropertyChanged += EditorViewModelPropertyChanged;
+            
 
             #region Main Menu
             _mainMenuViewModel = new ViewModels.MainMenuViewModel();
@@ -91,6 +97,26 @@ namespace StationControllerUi
             _mainMenuViewModel.RescentFiles = _rescentFilesHandler.RescentFiles;
             _stationController = new Util.StationController(_config.ScPath, _config.DebugPort);
             
+        }
+
+        private void DisplayNetwork()
+        {
+            var interfaces = NetworkInterface.GetAllNetworkInterfaces();
+            StringBuilder builder = new StringBuilder();
+            foreach(var iface in interfaces.Where(w => w.OperationalStatus == OperationalStatus.Up))
+            {
+                var address = iface.GetIPProperties();
+                var ip = address.UnicastAddresses.FirstOrDefault(f => f.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+                if(ip == null)
+                {
+                    continue;
+                }
+                builder.AppendLine($"{iface.Name} - {ip.Address}");
+            }
+
+            var str = builder.ToString();
+            Windows.SelectableDialog dlg = new Windows.SelectableDialog(str);
+            dlg.ShowDialog();
         }
 
         protected override void OnClosing(CancelEventArgs e)

@@ -130,7 +130,7 @@ namespace StationControllerUi.ViewModels
         private void ParseContent()
         {
             var contentLines = Regex.Split(Content, Environment.NewLine).ToList();
-            var label2Line = contentLines.Where(w => w.Trim().StartsWith("label ")).Select(s => new LabelToLine { Label = s.Replace("label ",string.Empty), Line = contentLines.IndexOf(s) });
+            var label2Line = contentLines.Where(w => w.Trim().StartsWith("label ")).Select(s => new LabelToLine { Label = s.Replace("label ",string.Empty).Split(' ').FirstOrDefault(), Line = contentLines.IndexOf(s) });
             LabelToLine = label2Line.ToList();
 
             var completionLines = contentLines.Where(w => w.Trim().StartsWithAny("let", "glet", "define"));

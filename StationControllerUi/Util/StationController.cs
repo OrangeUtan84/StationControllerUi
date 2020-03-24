@@ -27,7 +27,7 @@ namespace StationControllerUi.Util
         private bool _isRunning;
         private SocketConnector _connector;
 
-        private readonly string DEBUG_CONNECTION_STRING = "open socket_client name=debug_connection proto=standard host=127.0.0.1 service=5001 options=\"wait_for_reply=no rcv_eol =\\\"<EOF>\\\" xmt_eol=\\\"<EOF>\\\"\" no_error";
+        private readonly string DEBUG_CONNECTION_STRING = "open socket_client name=debug_connection proto=standard host=127.0.0.1 service=5001 options=\"wait_for_reply=no rcv_eol=\\\"<EOF>\\\" xmt_eol=\\\"<EOF>\\\"\" no_error";
 
 
         public event EventHandler<ClientEventArgs> ClientConnected;
@@ -86,7 +86,7 @@ namespace StationControllerUi.Util
             }
 
             _connector.ClientConnected += StationControllerConnected;
-            _connector.ClientDisconnected += StationControllerDisconneccted;
+            _connector.ClientDisconnected += StationControllerDisconnected;
             _connector.DataReceived += StationControllerDataReceived;
 
 
@@ -104,7 +104,7 @@ namespace StationControllerUi.Util
             }
         }
 
-        protected void StationControllerDisconneccted(object sender, EventArgs e)
+        protected void StationControllerDisconnected(object sender, EventArgs e)
         {
             ClientDisconnected?.Invoke(this, e);
         }
@@ -169,7 +169,8 @@ namespace StationControllerUi.Util
 
         private List<string> ParseScript(List<string> merged)
         {
-            var replacedScript = merged.Select(s => s.Replace("print", "gosub __print")).ToList();
+            //currently the print function is not working
+            var replacedScript = merged;
 
             var scenarioButtonLines = replacedScript.Where(w => w.StartsWith("#/Button"));
 

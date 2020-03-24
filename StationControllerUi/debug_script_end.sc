@@ -1,8 +1,4 @@
-﻿label __print text
-	print $text
-	gosub SendData "PRINT" $text
-	return
-
+﻿
 label SendData cmnd,data
 	send name=debug_connection $cmnd:$data
 	return

@@ -13,6 +13,20 @@ namespace StationControllerUi.ViewModels
         private Commands.RelayCommand _startCommand;
         private Commands.RelayCommand _stopCommand;
         private Commands.RelayCommand _debugCommand;
+        private Commands.RelayCommand _displayNetworkCommand;
+
+        public Commands.RelayCommand DisplayNetworkCommand
+        {
+            get
+            {
+                return _displayNetworkCommand;
+            }
+            set
+            {
+                _displayNetworkCommand = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public Commands.RelayCommand DebugCommand
