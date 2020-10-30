@@ -103,7 +103,10 @@ namespace StationControllerUi.Util
         {
             content += "<EOF>";
             byte[] data = Encoding.ASCII.GetBytes(content);
-            _client.Send(data, data.Length, SocketFlags.None);
+            if (_client != null)
+            {
+                _client.Send(data, data.Length, SocketFlags.None);
+            }
         }
 
         public void Stop()

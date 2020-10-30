@@ -33,7 +33,6 @@ namespace StationControllerUi.Util
         public event EventHandler<ClientEventArgs> ClientConnected;
         public event EventHandler ClientDisconnected;
         public event EventHandler<DataReceivedEventArgs> DataReceived;
-        public event EventHandler<DataReceivedEventArgs> PrintReceived;
 
         public List<Scenario> Scenarios { get; set; } = new List<Scenario>();
 
@@ -99,7 +98,6 @@ namespace StationControllerUi.Util
             switch (e.Data.Split().First())
             {
                 case "PRINT":
-                    PrintReceived?.Invoke(this, new DataReceivedEventArgs(e.Data.Replace("PRINT", "").Trim()));
                     break;
             }
         }
@@ -172,16 +170,18 @@ namespace StationControllerUi.Util
             //currently the print function is not working
             var replacedScript = merged;
 
-            var scenarioButtonLines = replacedScript.Where(w => w.StartsWith("#/Button"));
+            var scenarioButtonLines = replacedScript.Where(w => w.StartsWith("#/"));
 
             Scenarios = (from s in scenarioButtonLines
                          let splittedString = s.Split(':')
+                         let type = splittedString[0].Replace("#/", "")
                          let labelName = splittedString[1]
                          let description = splittedString[2]
                          let parameters = splittedString.Length > 3 ? splittedString[3].Split('/') : new string[0]
                          select new Scenario
                          {
                              Name = labelName,
+                             Type = type,
                              Description = description,
                              Parameters = parameters.ToList()
                          }).ToList();

@@ -14,14 +14,11 @@
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
             <TabControl TabStripPlacement="Bottom">
-                <TabItem Header="Log">
-                    <views:LogView x:Name="logView" />
-                </TabItem>
-                <TabItem Header="Output" Height="22" VerticalAlignment="Top">
-                    <views:LogView x:Name="printView" />
-                </TabItem>
                 <TabItem Header="Scenarios" Height="22" VerticalAlignment="Top">
                     <views:ScenarioSelectView x:Name="scenarioSelectView" />
+                </TabItem>
+                <TabItem Header="Log">
+                    <views:LogView x:Name="logView" />
                 </TabItem>
             </TabControl>
         </DockPanel>

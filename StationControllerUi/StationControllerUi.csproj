@@ -65,6 +65,7 @@
     </ApplicationDefinition>
     <Compile Include="Config.cs" />
     <Compile Include="Controls\RegionFoldingStrategy.cs" />
+    <Compile Include="Converters\StringToBrushConverter.cs" />
     <Compile Include="Converters\EmptyListToBooleanConverter.cs" />
     <Compile Include="Converters\FullPathToFileNameConverter.cs" />
     <Compile Include="Util\ClientEventArgs.cs" />

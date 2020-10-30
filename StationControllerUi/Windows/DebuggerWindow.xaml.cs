@@ -23,19 +23,17 @@ namespace StationControllerUi.Windows
     {
         private StationController _stationController;
         private ViewModels.LogViewModel _logViewModel;
-        private ViewModels.LogViewModel _printViewModel;
         private ViewModels.SendCommandViewModel _sendCommandViewModel;
         private ViewModels.ScenarioSelectViewModel _scenarioSelectViewModel;
         public DebuggerWindow(StationController stationController)
         {
             InitializeComponent();
+
+            Dispatcher.Invoke(() => IsEnabled = false); //disable until connected
             _stationController = stationController;
             _logViewModel = new ViewModels.LogViewModel();
             logView.DataContext = _logViewModel;
-
-            _printViewModel = new ViewModels.LogViewModel();
-            printView.DataContext = _printViewModel;
-
+            
             _sendCommandViewModel = new ViewModels.SendCommandViewModel();
             sendCommandView.DataContext = _sendCommandViewModel;
 
@@ -53,7 +51,6 @@ namespace StationControllerUi.Windows
             _stationController.ClientConnected += StationController_ClientConnected;
             _stationController.ClientDisconnected += StationController_ClientDisconnected;
             _stationController.DataReceived += StationController_DataReceived;
-            _stationController.PrintReceived += StationController_PrintReceived;
             _stationController.RunningStateChanged += StationController_RunningStateChanged;
 
             _scenarioSelectViewModel.Scenarios = new System.Collections.ObjectModel.ObservableCollection<Scenario>(_stationController.Scenarios);
@@ -75,10 +72,6 @@ namespace StationControllerUi.Windows
             }
         }
 
-        private void StationController_PrintReceived(object sender, DataReceivedEventArgs e)
-        {
-            AppendOutput(e.Data);
-        }
 
         private void StationController_DataReceived(object sender, DataReceivedEventArgs e)
         {
@@ -87,11 +80,13 @@ namespace StationControllerUi.Windows
 
         private void StationController_ClientDisconnected(object sender, EventArgs e)
         {
+            Dispatcher.Invoke(() => IsEnabled = false);
             AppendLog($"Client disconnected");
         }
 
         private void StationController_ClientConnected(object sender, ClientEventArgs e)
         {
+            Dispatcher.Invoke(() => IsEnabled = true);
             AppendLog($"Client connected: {e.ClientName}");
         }
 
@@ -99,10 +94,7 @@ namespace StationControllerUi.Windows
         {
             Dispatcher.BeginInvoke(new Action(() => _logViewModel.Append(log)));
         }
-        public void AppendOutput(string print)
-        {
-            Dispatcher.BeginInvoke(new Action(() => _printViewModel.Append(print)));
-        }
+
 
         protected override void OnClosing(CancelEventArgs e)
         {
