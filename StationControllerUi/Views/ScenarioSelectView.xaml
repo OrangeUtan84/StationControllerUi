@@ -22,9 +22,34 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Button Background="{Binding Color, Converter={StaticResource stringToBrushConverter}}" Command="{Binding ElementName=level1view, Path=DataContext.CallScenarioCommand, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding}" Content="{Binding Description}">
-                    </Button>
+                    <ContentControl Content="{Binding}">
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Type}" Value="Button">
+                                        <Setter Property="ContentTemplate">
+                                            <Setter.Value>
+                                                <DataTemplate>
+                                                <Button Background="{Binding Color, Converter={StaticResource stringToBrushConverter}}" Command="{Binding ElementName=level1view, Path=DataContext.CallScenarioCommand, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding}" Content="{Binding Description}" />
+                                                </DataTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Header">
+                                        <Setter Property="ContentTemplate">
+                                            <Setter.Value>
+                                                <DataTemplate>
+                                                    <Label Background="{Binding Color, Converter={StaticResource stringToBrushConverter}}" Content="{Binding Description}" />
+                                                </DataTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
                 </DataTemplate>
+              
             </ListView.ItemTemplate>
         </ListView>    
     </Grid>

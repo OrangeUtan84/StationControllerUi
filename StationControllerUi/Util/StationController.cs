@@ -127,12 +127,15 @@ namespace StationControllerUi.Util
         /// starts the process in run mode for the given script
         /// </summary>
         /// <param name="script">the interpreter script to be executed</param>
-        public void Start(string script)
+        public void Start(string script, bool hideWindow = false)
         {
             _scProcess.StartInfo = new ProcessStartInfo
             {
                 FileName = _scPath,
-                Arguments = $"-i -d 1 -c \"read -P '{script}'\""
+                Arguments = $"-i -d 1 -c \"read -P '{script}'\"",
+                CreateNoWindow = hideWindow,
+                UseShellExecute = !hideWindow
+                
             };
             _scProcess.Start();
             IsRunning = true;
@@ -141,7 +144,7 @@ namespace StationControllerUi.Util
         }
 
 
-        public void StartDebugger(string script)
+        public void StartDebugger(string script, bool hideWindow = false)
         {
             //first create a local copy of the script
 
@@ -157,7 +160,7 @@ namespace StationControllerUi.Util
             var merged = new string[] { string.Format(DEBUG_CONNECTION_STRING, _debugPort) }.Concat(parsed.Concat(debugEndContent));
 
             File.WriteAllLines(tempScript, merged);
-            Start(tempScript);
+            Start(tempScript, hideWindow);
         }
 
         public void SendCommand(string command)
@@ -170,9 +173,9 @@ namespace StationControllerUi.Util
             //currently the print function is not working
             var replacedScript = merged;
 
-            var scenarioButtonLines = replacedScript.Where(w => w.StartsWith("#/"));
+            var scenarioLines = replacedScript.Where(w => w.StartsWith("#/"));
 
-            Scenarios = (from s in scenarioButtonLines
+            Scenarios = (from s in scenarioLines
                          let splittedString = s.Split(':')
                          let type = splittedString[0].Replace("#/", "")
                          let labelName = splittedString[1]

@@ -14,6 +14,22 @@ namespace StationControllerUi.ViewModels
         private Commands.RelayCommand _stopCommand;
         private Commands.RelayCommand _debugCommand;
         private Commands.RelayCommand _displayNetworkCommand;
+        private Commands.RelayCommand _hideScWindowChangedCommand;
+
+
+        public Commands.RelayCommand HideScWindowChangedCommand
+        {
+            get
+            {
+                return _hideScWindowChangedCommand;
+            }
+            set
+            {
+                _hideScWindowChangedCommand = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public Commands.RelayCommand DisplayNetworkCommand
         {

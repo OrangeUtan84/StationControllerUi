@@ -36,6 +36,7 @@ namespace StationControllerUi
         private Util.RescentFilesHandler _rescentFilesHandler;
         private Config _config;
 
+        private bool _hideScWindow;
 
         
         public MainWindow()
@@ -52,7 +53,7 @@ namespace StationControllerUi
                     {
                         return;
                     }
-                    _stationController.Start(_editorViewModel.FilePath);
+                    _stationController.Start(_editorViewModel.FilePath, _hideScWindow);
                 },
                 _ => !_stationController.IsRunning);
 
@@ -63,7 +64,7 @@ namespace StationControllerUi
                     {
                         return;
                     }
-                    _stationController.StartDebugger(_editorViewModel.FilePath);
+                    _stationController.StartDebugger(_editorViewModel.FilePath, _hideScWindow);
                     var debugWindow = new Windows.DebuggerWindow(_stationController);
                     debugWindow.Show();
                 },
@@ -75,6 +76,16 @@ namespace StationControllerUi
 
             _processControlViewModel.DisplayNetworkCommand = new Commands.RelayCommand(
                 _ => DisplayNetwork());
+
+            _processControlViewModel.HideScWindowChangedCommand = new Commands.RelayCommand(
+                isChecked =>
+                {
+                    _hideScWindow = (bool) isChecked;
+                },
+                _ =>
+                {
+                    return !_stationController.IsRunning;
+                });
 
             editorView.Initialize(_config.SyntaxDescriptionFile);
 

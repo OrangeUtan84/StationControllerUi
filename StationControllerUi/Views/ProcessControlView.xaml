@@ -71,6 +71,7 @@
                         </Image>
                     </Button.Content>
                 </Button>
+                <CheckBox x:Name="cbHideSc" Command="{Binding HideScWindowChangedCommand}" CommandParameter="{Binding ElementName=cbHideSc, Path=IsChecked}" Content="Hide SC Window" />
             </ToolBar>
         </ToolBarTray>
     </Grid>
