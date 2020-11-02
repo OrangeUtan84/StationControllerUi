@@ -38,6 +38,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icons\binarcode.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.AvalonEdit, Version=6.0.1.278, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonEdit.6.0.1\lib\net45\ICSharpCode.AvalonEdit.dll</HintPath>
@@ -180,6 +183,7 @@
     </None>
     <Resource Include="Icons\Test_64x.png" />
     <Resource Include="Icons\Globe_64x.png" />
+    <Resource Include="Icons\binarcode.ico" />
     <Content Include="SC\cygwin1.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
