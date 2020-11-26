@@ -71,6 +71,7 @@
     <Compile Include="Converters\StringToBrushConverter.cs" />
     <Compile Include="Converters\EmptyListToBooleanConverter.cs" />
     <Compile Include="Converters\FullPathToFileNameConverter.cs" />
+    <Compile Include="Util\AdditionalScriptContent.cs" />
     <Compile Include="Util\ClientEventArgs.cs" />
     <Compile Include="Util\DataReceivedEventArgs.cs" />
     <Compile Include="Util\Extensions.cs" />

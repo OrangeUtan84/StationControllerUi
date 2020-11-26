@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:StationControllerUi.Windows"
         xmlns:views="clr-namespace:StationControllerUi.Views"
         mc:Ignorable="d"
-        Title="Debugger" Height="436.288" Width="884.764" WindowStyle="ToolWindow">
+        Title="Debugger" Height="Auto" Width="884.764" WindowStyle="ToolWindow">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

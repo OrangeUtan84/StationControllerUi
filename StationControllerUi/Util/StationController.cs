@@ -153,13 +153,19 @@ namespace StationControllerUi.Util
             File.Copy(script, tempScript, true);
 
             var originalContent = File.ReadAllLines(tempScript);
-            //var debugStartContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "debug_script_start.sc"));
-            var debugEndContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "debug_script_end.sc"));
+            //var debugEndContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "debug_script_end.sc"));
             var parsed = ParseScript(originalContent.ToList());
-            //var merged = debugStartContent.Concat(parsed.Concat(debugEndContent));
-            var merged = new string[] { string.Format(DEBUG_CONNECTION_STRING, _debugPort) }.Concat(parsed.Concat(debugEndContent));
+            parsed.Insert(0, string.Format(AdditionalScriptContent.DEBUG_CONNECTION_STRING, _debugPort)); //add to beginning
+            parsed.Add(AdditionalScriptContent.DEBUG_CONNECTION_LABEL); //append to end
 
-            File.WriteAllLines(tempScript, merged);
+
+
+            //add connection label to existing script
+            //var merged = new string[] { string.Format(AdditionalScriptContent.DEBUG_CONNECTION_STRING, _debugPort) }
+            //.Concat(
+            //    );
+
+            File.WriteAllLines(tempScript, parsed);
             Start(tempScript, hideWindow);
         }
 
